@@ -1,0 +1,12 @@
+{% extends 'layouts/layout.html' %}
+{% load static %}
+
+
+{% block body %}
+<div id="root"></div>
+{% endblock body %}
+
+
+{% block extra_js %}
+    <script src="{% static 'frontend/main.js' %}" defer></script>
+{% endblock extra_js %}

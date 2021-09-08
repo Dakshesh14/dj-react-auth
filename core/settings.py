@@ -52,6 +52,7 @@ INSTALLED_APPS = [
 
     # custom made
     'accounts.apps.AccountsConfig',
+    'frontend.apps.FrontendConfig',
 
 ]
 
