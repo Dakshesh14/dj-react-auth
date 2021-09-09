@@ -13,23 +13,24 @@ const initialState = {
     },
 }
 
-const reducer = (state=initialState, action) => {
-    switch(action.type){
+const reducer = (state = initialState, action) => {
+    switch (action.type) {
 
-        case USER_LOGIN_SUCCESS || USER_REGISTER_SUCCESS :{
-            return {
-                ...state,
-                user: action.payload,
-                isAuthenticated: true,
+        case USER_LOGIN_SUCCESS:
+        case USER_REGISTER_SUCCESS:
+            {
+                return {
+                    ...state,
+                    user: action.payload,
+                    isAuthenticated: true,
+                }
             }
-        }
-        case USER_LOGOUT:{
-            return {
-                ...state,
-                isAuthenticated: false,
+        case USER_LOGOUT:
+            {
+                return initialState
             }
-        }
-        default: return state
+        default:
+            return state
 
     }
 }

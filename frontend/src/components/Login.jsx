@@ -1,15 +1,35 @@
-import React, { memo } from 'react';
+import React, {
+    memo,
+    useState,
+} from 'react';
 
 import {
     Link,
+    useHistory,
 } from 'react-router-dom';
 
+// importing redux related stuff
+import { connect } from 'react-redux';
+import { userLoginSuccess, userLogout } from '../store/user/action';
 
-import { Formik, Form } from 'formik';
-import TextField from './TextField';
+// importing axios
+import axios from 'axios';
+
+// importing formik and yup for form validation
 import * as Yup from 'yup';
+import { Formik, Form } from 'formik';
 
-export default memo(function Login() {
+// importing actions
+import { csrftoken } from '../common/getCsrfToken';
+
+// importing components
+import TextField from './TextField';
+
+
+function Login({ userLoginSuccess, userLogout }) {
+
+    const [error, setError] = useState(null);
+    let history = useHistory();
 
     const validate = Yup.object({
         username: Yup.string()
@@ -18,6 +38,27 @@ export default memo(function Login() {
             .required('Password is required')
     })
 
+    const handleSubmit = (value) => {
+        axios({
+            method: "POST",
+            url: "../auth/api/login",
+            data: value,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
+            },
+        }).then(res => {
+            const data = {
+                ...res.data.user,
+                token: res.data.token,
+            };
+            userLoginSuccess(data);
+            history.push('/')
+        }).catch(() => {
+            userLogout();
+            setError("Incorrect Credentials");
+        })
+    }
 
     return (
         <div className="container mt-5 pt-5">
@@ -32,13 +73,12 @@ export default memo(function Login() {
                             password: '',
                         }}
                         validationSchema={validate}
-                        onSubmit={values => {
-                            console.log(values)
-                        }}
+                        onSubmit={values => handleSubmit(values)}
                     >
                         <Form>
                             <TextField label="Username" name="username" type="text" />
                             <TextField label="Password" name="password" type="password" />
+                            {error && <small className="text-danger">{error}</small>}
                             <p className="text-muted">
                                 Don't have an account?
                                 <Link to="/register" className="ms-1">Register</Link>
@@ -50,4 +90,14 @@ export default memo(function Login() {
             </div>
         </div>
     )
-})
+}
+
+const mapDispatchToProps = {
+    userLoginSuccess: (payload) => userLoginSuccess(payload),
+    userLogout: () => userLogout(),
+}
+
+export default connect(
+    null,
+    mapDispatchToProps,
+)(memo(Login))
