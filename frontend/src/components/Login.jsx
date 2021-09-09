@@ -26,10 +26,11 @@ import { csrftoken } from '../common/getCsrfToken';
 import TextField from './TextField';
 
 
-function Login({ userLoginSuccess, userLogout }) {
+function Login({ userLoginSuccess, userLogout, ...props }) {
+
+    let history = useHistory();
 
     const [error, setError] = useState(null);
-    let history = useHistory();
 
     const validate = Yup.object({
         username: Yup.string()
@@ -62,6 +63,16 @@ function Login({ userLoginSuccess, userLogout }) {
 
     return (
         <div className="container mt-5 pt-5">
+            <div className="row">
+                {
+                    props.location.state &&
+                    <div className="col-12">
+                        <div className={'alert' + ' alert-' + props.location.state.type} role="alert">
+                            {props.location.state.message}
+                        </div>
+                    </div>
+                }
+            </div>
             <div className="row">
                 <div className="col-lg-6 mx-auto">
                     <h2 className="fs-1 mb-5">

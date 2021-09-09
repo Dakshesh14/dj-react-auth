@@ -5,6 +5,9 @@ import {
     Route,
 } from 'react-router-dom';
 
+// importing protected route
+import ProtectRoute from './common/ProtectRoute';
+
 // importing components
 import Navbar from './components/Navbar';
 import Home from './components/Home';
@@ -18,7 +21,7 @@ function App() {
         <Router>
             <Navbar />
             <Switch>
-                <Route exact path="/" component={Home} />
+                <ProtectRoute exact path="/" component={Home} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/Logout" component={Logout} />
