@@ -20,7 +20,6 @@ import { FormikProvider, useFormik, Form } from "formik";
 import TextField from "./TextField";
 
 function Register({ userRegisterSuccess, userLogout }) {
-
   let history = useHistory();
 
   const validationSchema = Yup.object({
